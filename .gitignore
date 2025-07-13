@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+venv/
+*.venv
+
+# Data (don't commit large datasets)
+data/raw/
+data/images/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store

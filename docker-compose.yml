@@ -1,0 +1,33 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: pharma_pulse_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: pharma_pulse_app
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app  # Mount current directory to /app in container for live code changes
+    env_file:
+      - .env
+    ports:
+      - "8000:8000" # For FastAPI
+      - "3000:3000" # For Dagster UI
+    command: bash -c "sleep infinity" # Keep the container running
+
+volumes:
+  postgres_data:
