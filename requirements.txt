@@ -1,0 +1,22 @@
+# requirements.txt
+
+# Task 1: Scraping
+telethon
+python-dotenv
+
+# Task 2 & 4: Database and API
+psycopg2-binary
+dbt-postgres
+fastapi
+uvicorn[standard]
+SQLAlchemy
+
+# Task 3: Data Enrichment (CPU-only, smaller versions)
+ultralytics
+torch --index-url https://download.pytorch.org/whl/cpu
+torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# Task 5: Orchestration
+dagster
+dagster-webserver
+dagster-postgres
