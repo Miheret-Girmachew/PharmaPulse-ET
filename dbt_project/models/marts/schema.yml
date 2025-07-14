@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: fct_messages
+    description: "Fact table containing one row per message with key metrics."
+    columns:
+      - name: message_id
+        description: "The unique identifier for a message."
+        tests:
+          - unique
+          - not_null
+  
+  - name: dim_channels
+    description: "Dimension table for Telegram channels."
+    columns:
+      - name: channel_name
+        tests:
+          - unique
+          - not_null
