@@ -1,36 +1,39 @@
-# Dockerfile
+# Dockerfile (Improved and Final Version)
 
-# --- Stage 1: Base image with all dependencies installed ---
-FROM python:3.10-slim AS base
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
-# Set environment variables
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+# Install a comprehensive set of system dependencies for OpenCV and other libraries.
+# This prevents multiple "missing .so file" errors.
+# - libgl1-mesa-glx: Provides libGL.so.1 (the first missing library).
+# - libglib2.0-0: Provides libgthread-2.0.so.0 (the second missing library).
+# - libsm6, libxext6: Common X11 libraries that OpenCV may need stubs for.
+# - ffmpeg: A powerful library for video/audio processing.
+# - rm -rf /var/lib/apt/lists/*: Cleans up the apt cache to keep the final image size smaller.
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip
-RUN pip install --upgrade pip
-
-# Copy only the requirements file first to leverage Docker cache
+# Copy only the requirements file first for better caching
 COPY requirements.txt .
 
 # Install Python dependencies
-# This is the slow step that will be cached
 RUN pip install --no-cache-dir -r requirements.txt
 
-# --- Stage 2: Final image with application code ---
-FROM python:3.10-slim AS final
-
-WORKDIR /app
-
-# Set environment variables
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
-
-# Copy installed packages from the base stage
-COPY --from=base /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY --from=base /usr/local/bin /usr/local/bin
-
-# Copy the rest of the application code
+# Now, copy the rest of the application's code
 COPY . .
+
+# Expose ports
+EXPOSE 8000
+EXPOSE 3000
+
+# The command to run is specified in docker-compose.yml,
+# this is just a fallback.
+CMD ["dagster", "dev"]

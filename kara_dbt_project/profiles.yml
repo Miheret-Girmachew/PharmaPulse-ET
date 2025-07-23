@@ -1,0 +1,12 @@
+kara_dbt_project:
+  outputs:
+    dev:
+      dbname: telegram_data
+      host: db
+      pass: mypassword
+      port: 5432
+      schema: public
+      threads: 4
+      type: postgres
+      user: myuser
+  target: dev

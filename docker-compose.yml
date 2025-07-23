@@ -1,33 +1,34 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:14-alpine
-    container_name: pharma_pulse_postgres
+  db:
+    image: postgres:14
+    container_name: postgres_db
+    restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+   
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    restart: unless-stopped
 
   app:
     build: .
-    container_name: pharma_pulse_app
+    container_name: data_pipeline_app
+    restart: always
     depends_on:
-      - postgres
-    volumes:
-      - .:/app  # Mount current directory to /app in container for live code changes
+      - db
     env_file:
       - .env
     ports:
-      - "8000:8000" # For FastAPI
-      - "3000:3000" # For Dagster UI
-    command: bash -c "sleep infinity" # Keep the container running
+      - "8000:8000" # FastAPI
+      - "3000:3000" # Dagster UI
+    volumes:
+      - .:/app
+      - ./data:/app/data
+  
+    command: ["dagster", "dev", "-f", "kara_dagster_pipeline/repo.py", "-h", "0.0.0.0", "-p", "3000"]
 
 volumes:
   postgres_data:

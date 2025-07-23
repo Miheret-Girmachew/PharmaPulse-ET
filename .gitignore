@@ -1,19 +1,27 @@
-# Python
+# Environment
+.env
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Environment
-.env
+# Dependencies
 venv/
-*.venv
+.venv/
+env/
+.env/
+build/
+dist/
+*.egg-info/
 
-# Data (don't commit large datasets)
-data/raw/
-data/images/
+# dbt
+dbt_packages/
+logs/
+target/
 
-# IDE / OS
-.vscode/
-.idea/
-.DS_Storetelegram_session.session
+# Data
+data/
+
+# Other
+.DS_Store
+*.session

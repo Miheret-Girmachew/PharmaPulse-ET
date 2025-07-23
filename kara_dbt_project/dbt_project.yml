@@ -1,0 +1,35 @@
+# kara_dbt_project/dbt_project.yml
+
+name: 'kara_dbt_project'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+# It should match the name in your profiles.yml file.
+profile: 'kara_dbt_project'
+
+# These are the paths where dbt will look for different file types.
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# These are folders that dbt will clean up when you run `dbt clean`.
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# This is where we define the structure of our data warehouse.
+# Models in the "staging" folder will be built in the "staging" schema.
+# Models in the "marts" folder will be built in the "marts" schema.
+models:
+  kara_dbt_project:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts

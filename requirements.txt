@@ -1,22 +1,27 @@
-# requirements.txt
-
-# Task 1: Scraping
+# Data Scraping & DB Connection
 telethon
-python-dotenv
-
-# Task 2 & 4: Database and API
 psycopg2-binary
+
+# Data Transformation
 dbt-postgres
+
+# Data Enrichment
+ultralytics
+# torch  <-- COMMENT OUT OR DELETE THIS
+# torchvision <-- COMMENT OUT OR DELETE THIS
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.3.1+cpu
+torchvision==0.18.1+cpu
+
+
+# API
 fastapi
 uvicorn[standard]
-SQLAlchemy
 
-# Task 3: Data Enrichment (CPU-only, smaller versions)
-ultralytics
-torch --index-url https://download.pytorch.org/whl/cpu
-torchvision --index-url https://download.pytorch.org/whl/cpu
-
-# Task 5: Orchestration
+# Orchestration
 dagster
 dagster-webserver
 dagster-postgres
+
+# Utilities
+python-dotenv
